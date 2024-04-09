@@ -13,6 +13,12 @@ class Item(BaseModel):
     name: str
     price: float
     is_offer: bool | None = None
+    
+class Product(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
 
 
 app = FastAPI()
@@ -23,6 +29,10 @@ fake_names_db = [{"name": "John"}, {"name": "Carl"}, {"name": "Susan"}]
 @app.get("/")
 async def root() -> dict:
     return {"Hello": "world"}
+
+@app.post("/products/")
+async def create_product(product: Product):
+    return product
 
 @app.get("/testing/{number}")
 async def testing(number:int, needy:str):
