@@ -4,7 +4,6 @@ from enum import Enum
 import asyncio
 import random
 
-
 class ModelName(str, Enum):
     alexnet = 'alexnet'
     resnet = 'resnet'
@@ -18,11 +17,20 @@ class Item(BaseModel):
 
 app = FastAPI()
 
+fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
+fake_names_db = [{"name": "John"}, {"name": "Carl"}, {"name": "Susan"}]
 
 @app.get("/")
 async def root() -> dict:
     return {"Hello": "world"}
 
+@app.get("/testing/{number}")
+async def testing(number:int, needy:str):
+    return {"number": number, "needy": needy}
+
+@app.get("/items")
+async def get_items(skip: int = 0, limit: int = 10):
+    return {"result": {"item": random.choice(fake_items_db), "name": random.choice(fake_names_db)}}
 
 @app.get("/items/{item_id}")
 async def read_item(item_id: int, q: str | None = None, p: int | None = None) -> dict:
